@@ -1,6 +1,6 @@
 #include <iostream>  
 #include <list>    
-
+#include<queue>
 using namespace std; 
 
 class Graph {
@@ -30,21 +30,45 @@ public:
             cout << endl;
         }
     }
+
+    void bfs(int start) {
+        queue<int> q;
+        vector<bool> visited(V, false);
+
+        q.push(start);
+        visited[start] = true;
+
+        cout << "BFS Traversal: ";
+
+        while (!q.empty()) {
+            int u = q.front();
+            q.pop();
+            cout << u << " ";
+
+            // Visit all unvisited neighbors
+            for (int neighbor : l[u]) {
+                if (!visited[neighbor]) {
+                    q.push(neighbor);
+                    visited[neighbor] = true;
+                }
+            }
+        }
+        cout << endl;
+    }
 };
 
 int main() {
-    Graph graph(5);  // Define the number of vertices
-
+    Graph graph(7);  // Define the number of vertices
+    
     graph.addEdge(0, 1);
-    graph.addEdge(0, 4);
-    graph.addEdge(1, 2);
+    graph.addEdge(0, 2);
     graph.addEdge(1, 3);
-    graph.addEdge(1, 4);
-    graph.addEdge(2, 3);
+    graph.addEdge(2, 4);
     graph.addEdge(3, 4);
-
-    cout << "Graph adjacency list:\n";
-    graph.printGraph();
-
+    graph.addEdge(3, 5);
+    graph.addEdge(4, 5);
+    graph.addEdge(5, 6);
+    graph.bfs(0);
+    
     return 0;
 }
