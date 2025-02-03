@@ -31,7 +31,7 @@ public:
         }
     }
 
-    void bfs(int start) {
+    void bfs(int start) {  // O (V + E) i.e. Linear Time Complexity
         queue<int> q;
         vector<bool> visited(V, false);
 
