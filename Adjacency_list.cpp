@@ -55,6 +55,17 @@ public:
         }
         cout << endl;
     }
+
+    void dfs(int u,vector<bool> &vis){
+        vis[u] = true;
+        cout<<u<<" ";
+
+        for (auto v : l[u]){
+            if(!vis[v]){
+                dfs(v,vis);
+            }
+        }
+    }
 };
 
 int main() {
@@ -68,7 +79,9 @@ int main() {
     graph.addEdge(3, 5);
     graph.addEdge(4, 5);
     graph.addEdge(5, 6);
-    graph.bfs(0);
+
+    vector<bool> vis (7, false);
+    graph.dfs(0,vis);
     
     return 0;
 }
