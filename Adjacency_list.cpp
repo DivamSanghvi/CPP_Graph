@@ -6,10 +6,12 @@ using namespace std;
 class Graph {
     int V;  
     list<int>* l; // Array of lists
+    bool isUndirected;
 
 public:
     // Constructor
-    Graph(int V) {
+    Graph(int V, bool isUndirected) {
+        this->isUndirected = isUndirected;
         this->V = V;
         l = new list<int>[V]; // Allocate memory for adjacency list
     }
@@ -17,7 +19,9 @@ public:
     // Add an edge (undirected graph)
     void addEdge(int u, int v) {
         l[u].push_back(v);
-        l[v].push_back(u);
+        if(isUndirected){
+            l[v].push_back(u);
+        }
     }
 
     // Print adjacency list
@@ -114,7 +118,7 @@ public:
 };
 
 int main() {
-    Graph graph(10);  // Define the number of vertices
+    Graph graph(10,false);  // Define the number of vertices
     
     graph.addEdge(1, 6);
     graph.addEdge(6, 4);
