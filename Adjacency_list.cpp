@@ -115,20 +115,106 @@ public:
         return cycleUndirectedHelper(0,-1,vis);
 
     }
+
+//     bool cycleDirectedHelper(int src, vector<bool>&vis,vector<bool>&path){
+//         vis[src]=true;
+//         path[src]=true;
+
+//         for(auto v : l[src]){
+//             if(!vis[v]){
+//                 if(cycleDirectedHelper(v,vis,path)){
+//                     return true;
+//                 }else{
+//                     if(path[v]){
+//                         return true;
+//                     }
+//                 }
+//             }
+//         }
+
+//         path[src]= false;
+//         return false;
+//     }
+
+//     bool isCycleDirected(){
+//         vector<bool> vis (V,false);
+//         vector<bool> path (V, false);
+//         for(int i=0;i<V;i++){
+//             if(!vis[i]){
+//                 if (cycleDirectedHelper(i,vis,path))
+//                 {
+//                     return true;
+//                 }
+                
+//             }
+//         }
+
+//         return false;
+        
+//     }
+// };
+
+// int main() {
+//     Graph graph(4,false);  // Define the number of vertices
+    
+//     graph.addEdge(1, 6);
+//     graph.addEdge(6, 4);
+//     graph.addEdge(4, 3);
+//     graph.addEdge(4, 9);
+//     graph.addEdge(3, 8);
+//     graph.addEdge(3, 7);
+//     graph.addEdge(0, 2);
+//     graph.addEdge(2, 5);
+
+
+
+//     cout<< graph.isCycleDirected();
+//     return 0;
+// }
+bool cycleDirectedHelper(int src, vector<bool>& vis, vector<bool>& path) {
+        vis[src] = true;
+        path[src] = true;
+
+        for (auto v : l[src]) {
+            if (!vis[v]) {
+                if (cycleDirectedHelper(v, vis, path)) {
+                    return true;
+                }
+            }
+            else if (path[v]) {  // If vertex is visited AND in current path
+                return true;
+            }
+        }
+
+        path[src] = false;  // Remove from current path
+        return false;
+    }
+
+    bool isCycleDirected() {
+        vector<bool> vis(V, false);
+        vector<bool> path(V, false);
+
+        for (int i = 0; i < V; i++) {
+            if (!vis[i]) {
+                if (cycleDirectedHelper(i, vis, path)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 };
 
 int main() {
-    Graph graph(10,false);  // Define the number of vertices
+    Graph graph(4,false);  // Define the number of vertices
     
-    graph.addEdge(1, 6);
-    graph.addEdge(6, 4);
-    graph.addEdge(4, 3);
-    graph.addEdge(4, 9);
-    graph.addEdge(3, 8);
-    graph.addEdge(3, 7);
+    graph.addEdge(1, 0);
     graph.addEdge(0, 2);
-    graph.addEdge(2, 5);
+    graph.addEdge(2, 3);
+    graph.addEdge(3, 0);
 
-    cout<< graph.isCycleUndirected(10);
+
+
+    cout<< graph.isCycleDirected();
     return 0;
 }
