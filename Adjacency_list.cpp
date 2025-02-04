@@ -119,7 +119,6 @@ public:
 //     bool cycleDirectedHelper(int src, vector<bool>&vis,vector<bool>&path){
 //         vis[src]=true;
 //         path[src]=true;
-
 //         for(auto v : l[src]){
 //             if(!vis[v]){
 //                 if(cycleDirectedHelper(v,vis,path)){
@@ -131,11 +130,9 @@ public:
 //                 }
 //             }
 //         }
-
 //         path[src]= false;
 //         return false;
 //     }
-
 //     bool isCycleDirected(){
 //         vector<bool> vis (V,false);
 //         vector<bool> path (V, false);
@@ -144,19 +141,14 @@ public:
 //                 if (cycleDirectedHelper(i,vis,path))
 //                 {
 //                     return true;
-//                 }
-                
+//                 }            
 //             }
 //         }
-
-//         return false;
-        
+//         return false;    
 //     }
 // };
-
 // int main() {
-//     Graph graph(4,false);  // Define the number of vertices
-    
+//     Graph graph(4,false);  // Define the number of vertices   
 //     graph.addEdge(1, 6);
 //     graph.addEdge(6, 4);
 //     graph.addEdge(4, 3);
@@ -165,9 +157,6 @@ public:
 //     graph.addEdge(3, 7);
 //     graph.addEdge(0, 2);
 //     graph.addEdge(2, 5);
-
-
-
 //     cout<< graph.isCycleDirected();
 //     return 0;
 // }
@@ -203,18 +192,54 @@ bool cycleDirectedHelper(int src, vector<bool>& vis, vector<bool>& path) {
         }
         return false;
     }
+
+    bool isBipartite() {
+    queue<int> q;
+    vector<bool> vis(V, false); // To track visited nodes
+    vector<int> colour(V, -1); // To store colors: -1 (uncolored), 0, or 1
+
+    // Start BFS from each unvisited node to handle disconnected graphs
+    for (int i = 0; i < V; i++) {
+        if (!vis[i]) {
+            q.push(i);
+            colour[i] = 0; // Start coloring the first node with 0
+            vis[i] = true;
+
+            while (!q.empty()) {
+                int src = q.front();
+                q.pop();
+
+                // Process all neighbors of the current node
+                for (auto v : l[src]) {
+                    if (!vis[v]) {
+                        colour[v] = 1 - colour[src]; // Assign opposite color
+                        vis[v] = true;              // Mark as visited
+                        q.push(v);                  // Add to the queue
+                    } else if (colour[v] == colour[src]) {
+                        // If a neighbor has the same color, it's not bipartite
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+
+    return true; // If no conflicts are found, the graph is bipartite
+}
+
 };
 
 int main() {
-    Graph graph(4,false);  // Define the number of vertices
+    Graph graph(5 ,false);  // Define the number of vertices
     
-    graph.addEdge(1, 0);
     graph.addEdge(0, 2);
+    graph.addEdge(0, 1);
     graph.addEdge(2, 3);
-    graph.addEdge(3, 0);
+    graph.addEdge(1, 4);
+    graph.addEdge(4, 3);
 
 
 
-    cout<< graph.isCycleDirected();
+    cout<< graph.isBipartite();
     return 0;
 }
