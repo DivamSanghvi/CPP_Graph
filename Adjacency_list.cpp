@@ -31,9 +31,9 @@ public:
         }
     }
 
-    void bfs(int start) {  // O (V + E) i.e. Linear Time Complexity
+    void bfshelper(int start,vector <bool> &visited) {  // O (V + E) i.e. Linear Time Complexity
         queue<int> q;
-        vector<bool> visited(V, false);
+        
 
         q.push(start);
         visited[start] = true;
@@ -56,32 +56,75 @@ public:
         cout << endl;
     }
 
-    void dfs(int u,vector<bool> &vis){
+    void bfs(int total, int src){
+        vector<bool> visited(total, false);
+        for(int i = 0;i < 6;i++){
+            if(!visited[i]){
+                bfshelper(i,visited);
+                cout<<endl;
+            }
+        }
+    }
+
+    void dfshelper(int u,vector<bool> &vis){
         vis[u] = true;
         cout<<u<<" ";
 
         for (auto v : l[u]){
             if(!vis[v]){
-                dfs(v,vis);
+                dfshelper(v,vis);
             }
         }
+    }
+
+    void dfs(int total,int src){
+        
+        vector<bool> vis (7, false);
+        for(int i=0;i<total-1;i++){
+            if(!vis[i]){
+                dfshelper(i,vis);
+                cout<<endl;
+            }
+        }
+    }
+    bool cycleUndirectedHelper(int src, int par, vector<bool> &vis){
+        vis[src] = true ;
+        
+        for(auto v : l[src]){
+            if(!vis[v]){
+                if(cycleUndirectedHelper(v,src,vis)){
+                    return true;
+                }
+            }else{
+                if(v == par){
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    bool isCycleUndirected(int total){
+
+        vector<bool> vis (total, false);
+        return cycleUndirectedHelper(0,-1,vis);
+
     }
 };
 
 int main() {
-    Graph graph(7);  // Define the number of vertices
+    Graph graph(10);  // Define the number of vertices
     
-    graph.addEdge(0, 1);
+    graph.addEdge(1, 6);
+    graph.addEdge(6, 4);
+    graph.addEdge(4, 3);
+    graph.addEdge(4, 9);
+    graph.addEdge(3, 8);
+    graph.addEdge(3, 7);
     graph.addEdge(0, 2);
-    graph.addEdge(1, 3);
-    graph.addEdge(2, 4);
-    graph.addEdge(3, 4);
-    graph.addEdge(3, 5);
-    graph.addEdge(4, 5);
-    graph.addEdge(5, 6);
+    graph.addEdge(2, 5);
 
-    vector<bool> vis (7, false);
-    graph.dfs(0,vis);
-    
+    cout<< graph.isCycleUndirected(10);
     return 0;
 }
