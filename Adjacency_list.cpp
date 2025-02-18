@@ -160,7 +160,7 @@ public:
 //     cout<< graph.isCycleDirected();
 //     return 0;
 // }
-bool cycleDirectedHelper(int src, vector<bool>& vis, vector<bool>& path) {
+    bool cycleDirectedHelper(int src, vector<bool>& vis, vector<bool>& path) {
         vis[src] = true;
         path[src] = true;
 
@@ -225,21 +225,47 @@ bool cycleDirectedHelper(int src, vector<bool>& vis, vector<bool>& path) {
     }
 
     return true; // If no conflicts are found, the graph is bipartite
-}
+    }
 
+void all_path_helper(int src, int dest, vector<int>& vis, vector<int>& path) {
+        if (src == dest) {
+            path.push_back(dest);  // Include destination in the path
+            for (int node : path) cout << node << " ";
+            cout << endl;
+            path.pop_back();  // Remove destination for backtracking
+            return;
+        }
+
+        vis[src] = 1;
+        path.push_back(src);
+
+        for (auto v : l[src]) {
+            if (!vis[v]) {
+                all_path_helper(v, dest, vis, path);
+            }
+        }
+
+        vis[src] = 0;
+        path.pop_back();  // Backtracking: Remove last node
+    }
+
+    void all_path(int src, int dest) {
+        vector<int> visited(V, 0);
+        vector<int> path; // Use vector<int> instead of string
+        all_path_helper(src, dest, visited, path);
+    }
 };
 
 int main() {
-    Graph graph(5 ,false);  // Define the number of vertices
+    Graph g(5 ,false);  // Define the number of vertices
     
-    graph.addEdge(0, 2);
-    graph.addEdge(0, 1);
-    graph.addEdge(2, 3);
-    graph.addEdge(1, 4);
-    graph.addEdge(4, 3);
+    g.addEdge(0, 1);
+    g.addEdge(0, 2);
+    g.addEdge(1, 3);
+    g.addEdge(2, 3);
+    g.addEdge(3, 4);
 
-
-
-    cout<< graph.isBipartite();
+    cout << "All paths from 0 to 4:" << endl;
+    g.all_path(0, 4);
     return 0;
 }
