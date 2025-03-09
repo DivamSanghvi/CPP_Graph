@@ -24,47 +24,28 @@ public:
         }
     }
 
-    void printGraph(){
-        for(int i=0;i<V;i++){
-            cout<<i<<"->";
-            for(auto v : l[i]){
-                cout<<"("<<v.first<<","<<v.second<<")";
-            }
-            cout<<endl;
-        }
-    }
-
-    void prims(int src){
-        vector<int> parent(V,-1);
-        vector<int> dist(V,INT_MAX);
-        vector<bool> mst(V,false);
-
-        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>> pq;
-
-        pq.push({0,src});
-        dist[src] = 0;
-
+    //write code to get the mst answer
+    int prims(int src){
+        priority_queue<pair<int,int> , vector<pair<int,int>> , greater<pair<int,int>>> pq;
+        vector<bool> mst_set (V,false);
+        mst_set[src] = true;
+        int ans = 0;
+        pq.push({0,src});   
         while(!pq.empty()){
-            int u = pq.top().second;
+            auto best = pq.top();
             pq.pop();
-
-            mst[u] = true;
-
-            for(auto v : l[u]){
-                int node = v.first;
-                int wt = v.second;
-
-                if(!mst[node] && dist[node] > wt){
-                    dist[node] = wt;
-                    parent[node] = u;
-                    pq.push({wt,node});
+            int to = best.second;
+            int weight = best.first;
+            if(mst_set[to]){
+                continue;
+            }
+            ans += weight;
+            mst_set[to] = true;
+            for(auto x : l[to]){
+                if(!mst_set[x.first]){
+                    pq.push({x.second,x.first});
                 }
             }
         }
-
-        for(int i=0;i<V;i++){
-            cout<<parent[i]<<"-"<<i<<" "<<dist[i]<<endl;
-        }
-    }
-    
+    }  
 };
